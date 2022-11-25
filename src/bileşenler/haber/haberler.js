@@ -1,3 +1,4 @@
+//import { body } from 'msw/lib/types/context';
 import './haberler.less'
 // Haberleri üretmek için aşağıdaki data kullanılacak. Önce inceleyin sonra 94. satıra geçin.
 // OPSİYONEL: Kendinizi maceracı hissediyorsanız, bu verileri farklı bir modülden dışa aktarmaya çalışın ve buraya aktarın.
@@ -87,6 +88,15 @@ const data = [
     ucuncuParagraf: `Hodor hodor - hodor... Hodor hodor hodor hodor. Hodor. Hodor! Hodor hodor, hodor hodor hodor hodor hodor; hodor hodor? Hodor!
           Hodor hodor, HODOR hodor, hodor hodor?! Hodor! Hodor hodor, HODOR hodor, hodor hodor, hodor, hodor hodor. Hodor, hodor.
           Hodor. Hodor, hodor, hodor. Hodor hodor... Hodor hodor hodor?! Hodor, hodor... Hodor hodor HODOR hodor, hodor hodor. Hodor.`
+  },
+  {
+    baslik: 'Beyza Bileşen Oluşturmayı Öğrendi!',
+    tarih: '25 Kasım 2022',
+    ilkParagraf: `Başta biraz zorlandı tabii.`,
+
+    ikinciParagraf: `Ama pes etmedi.`,
+
+    ucuncuParagraf: `Ve öğrendi.`
   }
 ];
 
@@ -115,3 +125,61 @@ const data = [
   Adım 5: Veri dizisine yeni haber nesnesi eklemeyi deneyin. Diğer verilerle aynı yapıda olmasına dikkat edin.
   Eklediğiniz yeni haberi görmek için sayfayı yenileyin.
 */
+
+function haberYapici (haber) {
+  //div
+  const yeniHaber = document.createElement("div");
+  yeniHaber.classList.add("article");
+
+  //baslik
+  const haberBasligi = document.createElement("h2");
+  haberBasligi.textContent = haber.baslik;
+  yeniHaber.appendChild(haberBasligi);
+
+  //tarih
+  const haberTarihi = document.createElement("p");
+  haberTarihi.classList.add("tarih");
+  haberTarihi.textContent = haber.tarih;
+  yeniHaber.appendChild(haberTarihi);
+
+  //paragraflar
+  const paragrafBir = document.createElement("p");
+  paragrafBir.textContent = haber.ilkParagraf;
+
+  const paragrafIki = document.createElement("p");
+  paragrafIki.textContent = haber.ikinciParagraf;
+
+  const paragrafUc = document.createElement("p");
+  paragrafUc.textContent = haber.ucuncuParagraf;
+
+  yeniHaber.appendChild(paragrafBir);
+  yeniHaber.appendChild(paragrafIki);
+  yeniHaber.appendChild(paragrafUc); 
+
+  //button
+  const btn = document.createElement("span");
+  btn.classList.add("expandButton");
+  btn.textContent = "+";
+  yeniHaber.appendChild(btn);
+  
+  btn.addEventListener("click", (event)=> {
+    
+    if (document.querySelector(".article-open") != null && !event.target.parentElement.classList.contains("article-open")) {
+      document.querySelector(".article-open").classList.remove("article-open");
+    }
+    event.target.parentElement.classList.toggle("article-open");
+  })
+
+  return yeniHaber;
+}
+
+const tumHaberler = data.map((item) => {
+  return haberYapici(item);
+});
+
+const haberBolumu = document.querySelector("div.articles");
+
+tumHaberler.forEach((item) => {
+  haberBolumu.appendChild(item);
+})
+
